@@ -1,0 +1,41 @@
+version: "1.0"
+
+services:
+#POSTGRES DB SERVER
+  postgres_db:
+    image: postgres
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: otunctan
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: moviesdb
+      PGDATA: /data/postgres
+    volumes:
+      - postgres_data:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - postgres
+#PGADMIN WEB UI
+  pgadmin:
+    container_name: pgadmin
+    image: elestio/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-ozaytunctan@gmail.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-123456}
+      PGADMIN_LISTEN_PORT: 5050
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:5050"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+volumes:
+  postgres_data:
+  pgadmin:
