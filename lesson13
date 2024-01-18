@@ -1,0 +1,155 @@
+-- Group by 
+
+select * from movies;
+
+select count(movie_language) from movies;
+
+select movie_language ,count(movie_language) from movies group by movie_language;
+
+-- get average movie length group by movie language
+
+select 
+	avg(movie_length)::int,movie_language
+from movies
+group by movie_language;
+
+-- get the sum total movie length per age certificate
+
+select 
+	age_certificate,
+	sum(movie_length)
+from movies
+group by age_certificate;
+
+
+-- list minimum and maximum movie length group by movie language
+
+select 
+	movie_language,
+	min(movie_length),
+	max(movie_length)
+from movies
+group by movie_language
+order by max(movie_length) desc;
+	
+-- can we use column1, aggregate fucntion column without specifying group by clause?
+
+select 
+	avg(movie_length)::int,
+	movie_language,
+	age_certificate
+from movies
+group by movie_language,age_certificate;
+
+select 
+	movie_language,
+	age_certificate,
+	avg(movie_length) as "Avg Movie Length"
+from movies
+where movie_length > 100
+group by movie_language, age_certificate;
+
+-- How many directors per each nationallity ?
+
+select 
+	nationality,
+	count(*)
+from directors
+group by nationality;
+
+-- get total sum movie length for each age certificate and movie Language combination
+
+select 
+	age_certificate,
+	movie_language,
+	sum(movie_length)
+from movies
+group by age_certificate,movie_language
+order by 3 desc;
+
+-- aggregate function and column are not applicable in group by
+
+-- order or from where group by having 
+
+
+-- HAVING (acts on aggregate columns and not actual select columns)
+
+-- list movies languages where sum total length of the movies is greater than 200 
+
+-- we can use aggregate function in order by clause
+
+select	
+	movie_language,
+	sum(movie_length)
+from movies
+group by movie_language
+having sum(movie_length) > 200;
+
+-- list directors where their sum total movie length is greater than 200
+-- always use aggregate function in having clause
+
+select 
+	director_id,
+	sum(movie_length)
+from movies
+group by director_id
+having sum(movie_length) > 200
+order by 1 desc;
+
+
+-- can we use column aliases with having clause (no)
+
+-- order of execution (from -> where -> group by -> having -> select -> distinct -> order by -> limit)
+
+-- HAVING VS WHERE
+
+-- Having works on result group
+-- where works on on select columns and not on result groups
+
+-- Handling NULL values with Group By
+
+-- create table employees_test(
+-- 	employee_id serial primary key,
+-- 	employee_name varchar(100),
+-- 	department varchar(100),
+-- 	salary int
+-- );
+
+select * from employees_test;
+
+insert into employees_test(employee_name,department,salary) values
+('John','Finance',2000),
+('Mary',NULL,3000),
+('Adam',NULL,4000),
+('Linda','IT',10000);
+
+select 
+	employee_name,
+	department,
+	count(salary) as total_salary
+from employees_test
+group by department,employee_name;
+
+
+-- NULL values --coalesce(source,'')
+select 
+	employee_name,
+	coalesce(department,'No department') as department,
+	count(salary) as total_salary
+from employees_test
+group by department,employee_name;
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

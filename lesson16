@@ -1,0 +1,134 @@
+-- Combining Queries Together With UNION
+
+-- The union operator combines result sets from two or more select statements into a single
+-- column result set
+
+select 
+* from left_products
+union
+select 
+* 
+from right_products;
+
+-- union does not give you duplicate date from a table
+
+-- to get duplicate records use union all
+
+select 
+	first_name,
+	last_name	
+from directors
+union all 
+select 
+first_name,
+last_name 
+from actors
+order by first_name;
+
+select 'actors' as "tablename";
+
+-- for union data type of the columns have to match
+select 
+	first_name,
+	last_name,
+	'director' as "tablename"
+from directors;
+
+
+-- lets combine all directors where nationality are american, german and all female actors
+
+select 
+	first_name,
+	last_name,
+	'director' as "Profession"
+from directors
+where nationality in ('American','German')
+
+union
+
+select 
+	first_name,
+	last_name,
+	'actor' as "Profession"
+from actors
+where gender = 'F';
+
+-- union table with different number of columns
+
+-- create table table3(
+-- 	col1 int,
+-- 	col2 int
+-- );
+-- create table table4(
+-- 	col3 int
+-- );
+
+select 
+	col1,col2
+from table3
+union
+select null as col1, col3 from
+table4;
+
+-- INTERSECT
+
+select
+product_id,
+product_name
+from left_products
+intersect
+select 
+product_id,
+product_name
+from right_products;
+
+
+select
+	first_name,
+	last_name
+from directors
+intersect
+select 
+	first_name,
+	last_name 
+from actors;
+
+-- Combining queries together with EXCEPT
+
+-- the except operator returns the row in the first query that do not appear in the 
+-- output of the second query
+
+select 
+	product_id,
+	product_name
+from left_products
+except
+select
+	product_id,
+	product_name
+from right_products;
+
+select 
+	first_name,
+	last_name
+from directors
+except
+select
+	first_name,
+	last_name
+from actors;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

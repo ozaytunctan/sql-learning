@@ -1,0 +1,144 @@
+-- sequence in postgresql
+
+create sequence if not exists test_seq;
+
+select nextval('test_seq'); -- 1 2 3 in each execution
+
+select currval('test_seq');--4
+
+select setval('test_seq',100);
+
+select setval('test_seq',200,false);
+
+create sequence if not exists test_seq3 start with 100;
+
+
+select nextval('test_seq');
+
+alter sequence test_seq restart with 100;
+
+alter sequence test_seq rename to my_seq;
+
+create sequence if not exists my_sequence
+increment by 50
+minvalue 400
+maxvalue 6000
+start with 500
+
+
+select nextval('my_sequence'); -- 500 550 600 650
+
+create sequence if not exists my_sequence_smallint as smallint;
+create sequence if not exists my_sequence_int as int;
+
+-- creating descending sequence
+
+create sequence seq_asc
+select nextval('seq_asc');
+
+create sequence seq_desc
+increment by -1
+minvalue 1
+maxvalue 3
+start with 3
+cycle;
+
+select nextval('seq_desc');
+
+--  delete/drop a sequence
+
+drop sequence test_seq3;
+
+-- attaching a sequence to a table
+
+create table users(
+	user_id serial primary key,
+	user_name varchar(50)
+);
+
+insert into users(user_name) values('Triparna'),('Sukanya');
+
+select * from users;
+
+alter sequence users_user_id_seq restart with 100;
+
+create table users2(
+	user2_id int primary key,
+	user2_name varchar(50)
+);
+
+create sequence user2_user2_id_seq
+start with 100 owned by users2.user2_id;
+
+alter table users2
+alter column user2_id set default nextval('user2_user2_id_seq')
+
+select * from users2;
+
+
+-- listing all sequence
+
+select relname sequence_name
+from pg_class
+where 
+relkind = 'S';
+
+-- Share Sequence Among Tables
+
+create sequence common_fruits_seq start with 100;
+
+create table apples(
+	fruit_id int default nextval('common_fruits_seq') not null,
+	fruit_name varchar(50)
+);
+
+create table mangoes(
+	fruit_id int default nextval('common_fruits_seq') not null,
+	fruit_name varchar(50)
+);
+
+insert into apples(fruit_name) values('BigApple');
+
+select * from apples; -- 100
+
+insert into mangoes(fruit_name) values('BigMango');
+
+select * from mangoes; --101
+
+-- How to create an alpha Numeric Sequence
+
+create table contacts(
+	contact_id serial primary key,
+	contact_name varchar(50)
+);
+
+insert into contacts(contact_name) values('Sukanya'),('Triparna');
+select * from contacts;
+
+drop table contacts;
+
+create sequence table_seq;
+
+create table contacts(
+	contact_id text not null default ('ID' || nextval('table_seq')),
+	contact_name varchar(150)
+);
+
+alter sequence table_seq
+owned by contacts.contact_id;
+
+insert into contacts(contact_name) values('Sayani');
+
+select * from contacts;
+
+
+
+
+
+
+
+
+
+
+
+

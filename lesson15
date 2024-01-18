@@ -1,0 +1,144 @@
+-- Joining multiple table via join
+
+select 
+* from movies m
+join directors d on d.director_id = m.director_id
+join movies_revenues r on r.movie_id = m.movie_id;
+
+
+select *
+ from actors a
+ join movies_actors ma
+ on a.actor_id = ma.actor_id
+ join movies mv on mv.movie_id = ma.movie_id;
+ 
+ -- is join and inner join same ? (ans: EXACTLY same(YES))
+ 
+-- SELF JOIN (comparing row within same table)
+
+select * from 
+left_products t1
+inner join left_products t2
+on t1.product_id = t2.product_id;
+
+select * from directors d1
+inner join directors d2
+on d1.director_id = d2.director_id;
+
+-- Find all pairs of movies that have the same movie Length
+
+select 
+	t1.movie_name,
+	t2.movie_name,
+	t1.movie_length
+	
+from movies t1
+inner join movies t2
+on t1.movie_length = t2.movie_length
+and t1.movie_name <> t2.movie_name;
+
+-- Let's query hierarchical date like all directors and movies
+
+select 
+	t1.movie_name,
+	t2.director_id
+	
+from movies t1
+inner join movies t2 on 
+t1.director_id = t2.movie_id;
+
+-- cross join( cartesian product) -- all possible combination (n * m rows)
+
+select * from 
+left_products
+cross join right_products;
+
+select * from 
+right_products
+cross join left_products; -- Orders Matters
+
+select * from 
+left_products
+inner join right_products on true; --(same as cross join)
+
+-- Natural Join 
+-- A natural join is a join that creates an implicit join based on the same column name 
+-- in the joined tables.
+-- A natural join can be an inner join, left join or right join.
+-- If you do not specify a join explicitly, then postgresql will use inner join by default.
+
+select 
+* from 
+left_products
+natural right join right_products; -- kind of similar to using (column_name)
+
+
+-- Append tables with different Column
+
+create table table1(
+	add_date date,
+	col1 int,
+	col2 int,
+	col3 int
+);
+
+
+create table table2(
+	add_date date,
+	col1 int,
+	col2 int,
+	col3 int,
+	col4 int,
+	col5 int
+);
+
+insert into table1(add_date,col1,col2,col3) values
+('2020-01-01',1,2,3),
+('2020-01-02',4,5,6);
+
+insert into table2(add_date,col1,col2,col3,col4,col5) values
+('2020-01-01',NULL,7,8,9,10),
+('2020-01-02',11,12,13,14,15),
+('2020-01-03',16,17,18,19,20);
+
+select * from table1;
+select * from table2;
+
+-- coalesce function
+
+select coalesce(100,200); -- picks the first Value
+
+-- we want data from table 1
+
+
+select 	
+	coalesce(t1.add_date,t2.add_date) as "Add_date",
+	coalesce(t1.col1,t2.col1) as col1,
+	coalesce(t1.col2,t2.col2) as col2,
+	coalesce(t1.col3,t2.col3) as col3,
+	t2.col4,
+	t2.col5
+
+from table1 t1
+full outer join table2 t2
+on (t1.add_date = t2.add_date);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

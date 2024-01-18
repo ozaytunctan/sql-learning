@@ -1,0 +1,28 @@
+-- Date type  BOOLEAN
+
+-- postgres has 3 boolean type true false and null
+-- TRUE 'true' 'yes'  'y' '1' 't' for true
+-- FALSE 'false' 'f' 'n' 'no' '0'
+
+-- create table table_boolean(
+-- 	product_id serial primary key,
+-- 	is_available boolean not null
+-- );
+
+-- insert into table_boolean(is_available) values(true);
+
+select * from table_boolean;
+
+insert into table_boolean(is_available) values(false),('yes'),('no'),('0');
+
+select * from table_boolean where is_available ='1'; -- return true records
+
+
+-- set default values for boolean colums
+
+alter table table_boolean
+alter column is_available
+set default false;
+
+
+

@@ -1,0 +1,198 @@
+-- INNER JOINS
+
+select * from movies
+order by director_id;
+
+select * from directors;
+
+select 
+	movies.movie_id,
+	movies.movie_name,
+	movies.director_id,
+	
+	directors.first_name
+from movies
+inner join directors
+on movies.director_id = directors.director_id;
+
+
+-- with aliases
+
+select 
+	m.movie_id,
+	m.movie_name,
+	m.director_id,
+	
+	d.first_name
+from movies m
+inner join directors d
+on m.director_id = d.director_id;
+
+-- Let's filter some records
+
+select 
+	m.movie_id,
+	m.movie_name,
+	m.director_id,
+	m.movie_language,
+	
+	d.first_name
+from movies m
+inner join directors d
+on m.director_id = d.director_id
+where m.movie_language = 'English'
+and d.director_id = 3;
+
+
+-- INNER JOIN with USING
+
+select 
+	* from movies
+inner join directors 
+using (director_id);
+
+-- movies and movie_revenue
+
+select * 
+from movies
+inner join movies_revenues
+using(movie_id);
+
+
+-- connecting more that 2 tables
+select * from movies
+inner join directors
+using(director_id)
+inner join movies_revenues using(movie_id);
+
+--INNER JOIN WITH Filter Data
+
+select 
+* 
+from movies m
+inner join directors d 
+on m.director_id = d.director_id
+inner join movies_revenues r on m.movie_id = r.movie_id
+where m.movie_language = 'Japanese';
+
+
+select 
+	* from movies m
+inner join directors d 
+on m.director_id = m.director_id
+inner join movies_revenues r
+on m.movie_id = r.movie_id
+where m.movie_language in ('English','Chinese','Japanese')
+and r.revenues_domestic > 100;
+
+
+select 
+* from movies m
+inner join directors d
+on d.director_id = m.director_id
+inner join movies_revenues r on m.movie_id = r.movie_id;
+
+
+-- INNER JOIN with different column data type
+
+-- create table t1(test INT);
+
+-- create table t2(test varchar(10));
+
+-- can we join the above newly created tables ? 
+
+-- we use cast
+
+select 
+* from t1
+inner join t2 on t1.test = cast(t2.test as int);
+
+-- LEFT JOINS
+
+
+-- create table left_products(
+-- 	product_id serial primary key,
+-- 	product_name varchar(100)
+-- );
+
+
+--  create table right_products(
+--  	product_id serial primary key,
+--  	product_name varchar(100)
+-- );
+
+insert into left_products(product_id,product_name) values
+(1,'Computers'),(2,'Laptops'),(3,'Cameras'),(4,'Mobiles');
+
+select * from left_products;
+
+insert into right_products(product_id,product_name) values
+(1,'Computers'),(2,'Laptops'),(3,'Cameras'),(4,'Mobiles'),(5,'Tripod'),(6,'Keyboard');
+
+select * from right_products;
+
+select 
+* from left_products
+left join right_products on left_products.product_id = right_products.product_id;
+
+
+select d.first_name,d.last_name,m.movie_name
+from directors d
+left join movies m
+on m.director_id = d.director_id
+
+-- in left join it matters that what table comes first i.e. table1 
+
+-- count all movies of each directors
+
+select * from directors d
+left join movies m  on
+m.director_id = d.director_id
+group by d.first_name,d.last_name
+
+-- order by clause can have aggregate Function
+-- Null first/last is used with order by
+
+select 
+	d.first_name,
+	d.last_name,
+	sum(r.revenues_domestic + r.revenues_international) as "total_revenues"
+from directors d
+left join movies m on m.director_id = d.director_id
+left join movies_revenues r on r.movie_id = m.movie_id
+group by d.first_name,d.last_name 
+order by  3 nulls last;
+
+
+-- RIGHT JOIN
+
+select 
+*
+from left_products
+right join right_products on 
+left_products.product_id = right_products.product_id;
+
+
+select 
+d.first_name,
+d.last_name,
+m.movie_name
+from directors d
+right join movies m 
+on m.director_id = d.director_id;
+
+-- FULL JOIN
+-- Returns all data from table1 and table2
+
+select * from left_products
+full join right_products on 
+left_products.product_id = right_products.product_id;
+
+
+
+
+
+
+
+
+

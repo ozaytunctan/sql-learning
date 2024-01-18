@@ -1,0 +1,92 @@
+-- Aggregate Function
+-- count
+
+select count(*) from movies;
+
+select count(movie_length) from movies;
+
+select count(movie_language) from movies;
+
+select count(distinct(movie_language)) from movies;
+
+select count(distinct(director_id)) from movies;
+
+select count(*) from movies where movie_language = 'English';
+
+-- sum function
+
+select * from movies_revenues;
+
+select revenues_domestic from movies_revenues;
+
+select sum(revenues_domestic) from movies_revenues;
+
+select sum(movie_length) from movies where movie_language = 'English';
+
+select revenues_domestic from movies_revenues;
+
+
+select sum(distinct(revenues_domestic)) from movies_revenues;
+
+-- MIN AND MAX
+
+select max(movie_length) from movies;
+
+select min(movie_length) from movies;
+
+select max(movie_length) from movies where movie_language = 'English';
+
+-- latest movie in english
+
+select * from movies 
+where movie_language = 'English'
+order by  release_date desc;
+
+
+select max(release_date) from movies where movie_language = 'English';
+-- first movie relased in chinese
+
+select * from movies 
+where movie_language = 'Chinese'
+order by release_date asc;
+
+
+select max(movie_name) from movies; -- alphabetically last
+
+
+-- Greatest and Least function
+
+select greatest(12,14);
+
+select least(10,11);
+
+select greatest('a','b','c');
+
+select greatest(1,'a',2,'v'); -- throws an error
+
+select movie_id ,revenues_domestic,revenues_international,greatest(revenues_domestic,revenues_international) from movies_revenues;
+
+-- Avg function
+
+select * from movies;
+
+select 
+	avg(movie_length) 
+from movies;
+
+-- avg ignores null values
+
+-- mathematical operator
+
+-- (+ - * / %)
+
+select 11/2:: numeric(10,2) as divide;
+
+select * from movies_revenues;
+
+
+select (revenues_domestic + revenues_international) as "total revenues" from movies_revenues;
+
+
+
+

@@ -1,0 +1,149 @@
+create table customers(
+	customer_id serial primary key,
+	first_name varchar(50),
+	last_name varchar(50),
+	email varchar(150),
+	age int
+);
+
+select * from customers;
+
+insert into customers (first_name,last_name,email,age)
+values('Rahul','Banik','abc@gmail.com',22);
+
+
+insert into customers(first_name,last_name,email,age)
+values('sayani','majumder','sayani@gmail.com',23),
+('anisha','sinha','anisha@gmail.com',23);
+
+-- how to add say with '  in it (add additional quote)
+
+insert into customers(first_name)
+values('Bill''o sullivan');
+
+insert into customers(first_name)
+values('Adam');
+
+insert into customers(first_name)
+values('Joseph') returning *; -- Return you the affected rows and displays that
+
+
+insert into customers(first_name)
+values('Joseph') returning customer_id;
+
+--update data in table
+
+
+update customers
+set email = 'a2@b.com'
+where customer_id = 1
+
+--update multiple column
+
+update customers
+set 
+email = 'a4@b.com',
+age = 30
+where customer_id = 4
+
+
+-- use returning to get updated rows
+
+select * from customers;
+
+update customers
+ set 
+ email = 'lulu'
+ where customer_id = 5
+ returning *;
+ 
+ 
+ 
+ -- update all records in a table
+ 
+ update customers
+ set is_enable = 'y'
+ 
+ 
+-- delete records from a table
+delete from customers
+where customer_id = 6
+
+select * from customers;
+
+
+-- delete all record (don't use where clause)
+-- be extra cautious when deleting a record or table
+
+-- using upsert
+
+/* the idea is that when you insert a new row into the table, postgresql will update the row if it
+already exists , otherwise , it will insert the new row.
+
+*/
+
+
+create table t_tags(
+	id serial primary key,
+	tag text unique,
+	update_date timestamp default NOW() -- default value for the column is Now.
+);
+
+select * from t_tags;
+
+insert into t_tags(tag)
+values('pen'),('pencil')
+
+
+-- lets insert a record , on conflict do nothing
+
+insert into t_tags(tag)
+values('pen')
+on conflict (tag) 
+do nothing;
+
+
+insert into t_tags(tag)
+values('pen')
+on conflict (tag) 
+do update  set 
+tag = excluded.tag, -- tag = excluded.tag || '1',
+update_date = now();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+

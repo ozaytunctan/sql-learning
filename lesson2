@@ -1,0 +1,105 @@
+select * from movies;
+
+select * from actors;
+-- postgresql evaluates the from clause first then do the select statement
+
+select first_name, last_name from actors;
+
+-- Adding Alias to a Column
+
+select first_name as firstName from actors; -- alias will be lowercase
+
+select first_name as "FirstName" from actors;
+
+
+select first_name as "First Name" from actors;
+
+select 
+movie_name as "Movie Name", 
+movie_language as "Language"
+from movies; -- More Readable
+
+-- As keyword is Optional
+
+-- you can't use single quote when using aliases
+
+-- how to assign column alias as expression
+
+select first_name ||' ' ||last_name as "Name" from actors;
+
+
+
+select 2*10;
+
+
+-- Sort Record using Order by
+
+select 
+first_name 
+from actors
+order by actor_id desc;
+
+
+select 
+	*
+from movies
+order by
+	release_date asc;
+	
+	
+select 
+ 	*
+from movies
+order by 
+	release_date desc,
+	movie_name asc
+;
+
+select 
+  first_name,
+  last_name as surname
+from actors
+order by last_name;
+-- you can use alias in order by clause..
+
+select 
+	first_name,
+	length(first_name) as len
+from actors
+order by
+   len desc;
+
+select first_name, last_name from actors order by 1 asc, 2 desc;
+
+
+create table demo_sorting(
+	num int
+);
+
+insert into demo_sorting(num)
+values(1),(2),(3),(4),(NULL);
+
+select * from demo_sorting;
+
+select * from demo_string order by num asc;
+
+
+select * from demo_sorting order by num NULLS last;
+
+
+-- Null first
+
+select * from demo_sorting order by num NUllS first;
+
+drop table demo_sorting;
+
+select distinct movie_language from movies;
+
+select 
+	distinct movie_language,director_id
+from movies
+order by 1;  -- Gives us the Combined Unique value
+
+select distinct * from movies;
+
+
