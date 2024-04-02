@@ -1,0 +1,170 @@
+-- 	UUID -- UNIVERSAL UNIQUE IDENTIFIER
+
+--(128 BIT) (hexadecimal)
+
+
+-- uuid is better than serial in terms of uniqueness..
+
+-- postgresql relies on third party algo for uuid
+
+create extension if not exists "uuid-ossp";
+
+select uuid_generate_v1(); -- mac 
+
+select uuid_generate_v4();  -- completely random
+
+create table table_uuid(
+	product_di uuid default uuid_generate_v1(),
+	product_name varchar(100) not null
+);
+
+insert into table_uuid(product_name) values('Abc'),('cde');
+
+select * from table_uuid;
+
+
+alter table table_uuid
+alter column product_di
+set default uuid_generate_v4();
+
+-- Array
+
+-- phone text []
+-- class_name varchar[]
+
+create table table_array(
+	id serial,
+	name varchar(100),
+	phones text []
+);
+
+insert into table_array (name,phones)
+values('Adam',array ['999999999','888888888']);
+
+select
+ 	name,
+	phones [1]
+from
+	table_array;
+
+
+-- hstore data type
+
+-- hstore is a data type that store date into key-value pairs
+
+-- key value are just text strings only
+
+create extension if not exists hstore;
+
+
+create table table_hstore(
+	book_id serial primary key,
+	title varchar(100) not null,
+	book_info hstore 
+);
+
+insert into table_hstore(title,book_info)
+values('title1','
+	   "publisher" => "penguin Books",
+	   "paper_cost" => "10.00$"
+	   ');
+select * from table_hstore;
+
+
+select book_info -> 'publisher' as publisher from table_hstore;
+
+-- JSON 
+-- used for validation
+-- JSONB -- binary storage
+
+create table table_json(
+	id serial primary key,
+	docs json
+);
+
+select * from table_json;
+
+insert into table_json(docs) values
+('[1,2,3,4]'), ('[2,3,4,6]'), ('{"key":"value"}');
+
+select * from table_json
+where docs @> '2'; -- throws an error if used without jsonb ... json works in text data
+
+alter table table_json
+alter column docs type jsonb;
+
+create index on table_json using gin( docs jsonb_path_ops);-- fast query (gin type index)
+
+
+-- Network address data type
+
+-- date type(cidr,inet,macaddr,macaddr8)
+
+-- ipv4 sort before ipv6 (special sorting mechanism)
+
+create table table_netaddr(
+	id serial primary key,
+	ip inet
+);
+
+insert into table_netaddr(ip) values
+('4.34.67.100'),
+('4.166.97.80');
+
+
+select * from table_netaddr;
+
+-- set_masklen function : set netmask length for inet value
+
+-- set_masklen(ip,28);
+
+select
+ip,
+set_masklen(ip,28)
+from table_netaddr;
+
+-- convert inet to cide type
+select
+ip,
+set_masklen(ip,24) as inet_24,
+set_masklen(ip::cidr,24) as cide_24
+from table_netaddr;
+
+select 'rahul'::varchar(10) as name;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

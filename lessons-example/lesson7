@@ -1,0 +1,122 @@
+select * from movies;
+
+-- two types of conversion 
+
+-- explicit and implicit
+
+select * from movies
+where movie_id = '1';  -- implicit conversion
+
+select * from movies
+where movie_id = integer '1'; -- explicit conversion
+
+-- using cast for data conversion
+
+select cast('10' as integer);
+
+select 
+	cast('2020-01-01' as date),
+	cast('01-may-2020' as date);
+
+
+select 
+	cast('true'as boolean),
+	cast('F' as boolean);
+	
+	
+select cast('1' as boolean);
+
+-- expression::type
+
+
+select '1'::integer,
+'2020-02-02'::date;
+	
+select 
+	'10 minute'::interval,
+	'4 minute'::interval,
+	'2 week'::interval;
+
+
+	
+
+select 5!;
+
+select cast(20 as bigint)! as "result";
+
+select round(cast(10 as numeric),4) as "result";
+
+select substr(cast('123456' as text),2) as  "result";
+
+-- Table Data Conversion
+
+create table rating(
+	rating_id serial primary key,
+	rating varchar(1) not null
+);
+
+insert into rating(rating) values
+('a'),('b');
+
+select * from rating;
+
+insert into rating (rating) values
+(1),(2),(3),(4);
+
+select 
+	rating_id,
+	case
+	  when rating~E'\\d+$' then -- all character data will be zero and interger will remain
+	   cast(rating as integer)
+	  else
+	  	0
+	end as rating
+from rating;
+
+-- to_char()
+
+select to_char(100079,'999999');
+
+select 
+	release_date,
+	to_char(release_date,'dd-mm-yyyy')
+from movies;
+
+select 
+	movie_id,
+	revenue_domestic,
+	to_char(revenue_domestic,'$99999D99')
+from movies_revenues;
+
+-- to_number()
+
+select to_number('1420.90','9999');
+
+select to_number('$111.54','9g999g999');
+
+-- to_date()
+
+select to_date('2020/10/22','yy/mm/dd');
+
+select to_date('March 07,2019','Month dd,yyyy');
+
+-- to_timestamp(timestamp,format)
+
+select to_timestamp('2020-10-28 10:30:25','yyyy-mm-dd HH:MI:SS');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	

@@ -1,15 +1,22 @@
 version: "1.0"
 
 services:
-#POSTGRES DB SERVER
+  #POSTGRES DB SERVER
   postgres_db:
-    image: postgres
+    #image: postgres
+    build: .
     container_name: postgres_db
     environment:
       POSTGRES_USER: otunctan
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: moviesdb
       PGDATA: /data/postgres
+      POSTGRES_INITDB_ARGS: '--locale=tr_TR --encoding=UTF-8 --lc-collate=tr_TR.UTF-8 --lc-ctype=tr_TR.UTF-8'
+      LANG: 'tr_TR.UTF-8'
+      LANGUAGE: 'tr_TR.UTF-8'
+      LC_ALL: 'tr_TR.UTF-8'
+      LC_COLLATE: 'tr_TR.UTF-8'
+      LC_CTYPE: 'tr_TR.UTF-8'
     volumes:
       - postgres_data:/data/postgres
     ports:
@@ -17,7 +24,7 @@ services:
     restart: always
     networks:
       - postgres
-#PGADMIN WEB UI
+  #PGADMIN WEB UI
   pgadmin:
     container_name: pgadmin
     image: elestio/pgadmin

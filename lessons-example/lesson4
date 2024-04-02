@@ -1,0 +1,126 @@
+select cast('Rahul' as character(10)) as "Name";
+
+select 'Rahul'::char(10) as "Name";
+
+select 'Rahul'::varchar(10) as "Name";
+
+select 'ABCD 1234'::varchar(10) as "mixed";
+
+
+Select 'Humanity is a virtue associated with basic ethihcs of alturuism'::text as "sentence";
+
+
+-- Number data type (various type of number , but not NULL values).
+
+-- serial, int, decimal, numeric, float, Bigint,decimal
+
+-- Date / Time
+
+-- Date Time timestamp(date + stamp) timestamptz(time zone) interval
+
+
+-- date (4 bytes) yyyy-mm-dd
+
+-- current_date stores the current name
+
+create table table_date(
+    id serial primary key,
+	employee_name varchar(100) not null,
+	hire_date date not null,
+	add_date date default current_date		
+);
+
+insert into table_date(employee_name,hire_date) values
+('Adam','2020-01-01'),
+('Linda','2020-02-01');
+
+select * from table_date;
+
+select current_date;
+select Now();
+
+--Time (8 bytes)
+
+-- HH:MM HH:MM:SS HHMMSS
+
+create table table_time(
+ id serial primary key,
+	class_name varchar(100) not null,
+	start_time time not null,
+	end_time time not null
+);
+
+insert into table_time(class_name,start_time,end_time) values('Math','08:00:00','09:00:00'),
+('Chemistry','09:00:00','10:00:00');
+
+select * from table_time;
+
+
+-- get the current time
+ 
+select current_time;
+
+
+select current_time(4); -- precision in the parentheses
+
+select localtime;  
+
+select time '10:00' - time '04:00' as result; -- interval
+
+
+select current_time, current_time + interval '2 hours' as result;
+
+
+-- Timestamptz 
+
+create table table_time_tz(
+	ts timestamp,
+	tstz timestamptz
+);
+
+insert into table_time_tz (ts,tstz) values('2020-02-22 10:10:10-07','2020-02-22 10:10:10-07');
+
+select * from table_time_tz;
+
+
+show timezone;
+
+set timezone = 'Europe/berlin';
+
+select current_timestamp;
+
+select timeofday();
+
+-- select timezone('America/new_york'); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

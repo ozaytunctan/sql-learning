@@ -1,0 +1,225 @@
+-- user defined data type
+
+-- create domain data type(default is null)
+
+create domain addr varchar(100) not null;
+
+create table location(
+	address addr
+);
+
+insert into location(address) values('123 India');
+
+select * from location;
+
+create domain positive_numeric int not null check(value > 0);
+
+create table sample(
+	sample_id serial primary key,
+	value_num positive_numeric
+);
+insert into sample(value_num) values(10);
+
+select * from sample;
+
+create domain us_postal_code text check(
+	value ~'^\d{5}$'
+	or value ~'^\D{5}-\d{4}$'
+);
+
+create table addresses (
+	address_id serial primary key,
+	postal_code us_postal_code
+);
+insert into addresses(postal_code) values('10000');
+
+select * from addresses;
+
+create domain proper_email varchar(150)
+---- email expression
+
+
+-- create an enumeration type
+
+create domain valid_color varchar(10) 
+check( value in ('red','green','blue'))
+
+create table colors(
+  color  valid_color
+);
+
+insert into colors(color) values('red');
+-- drop domain data type
+-- drop domain name
+
+drop domain positive_numeric;  --ERROR:  cannot drop type positive_numeric because other objects depend on it
+--DETAIL:  table sample column value_num depends on type positive_numeric
+--HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+--SQL state: 2BP01
+
+drop domain positive_numeric cascade; -- column will be deleted
+
+-- before dropping domain make sure you change the column data type
+
+-- composite data type
+
+create type address as(
+	city varchar(50),
+	country varchar(20)
+);
+
+create table companies(
+	 comp_id serial primary key,
+	address address
+);
+
+insert into companies(address) values(row('london','uk'));
+
+select * from companies;
+
+select address from companies;
+
+-- (composite_column).field
+
+select (address).country from companies;
+
+create type inventory_item as
+(
+	name varchar(100),
+	supplier_id int,
+	price numeric
+
+);
+
+create table inventory(
+	inventory_id serial primary key,
+	item inventory_item
+);
+insert into inventory(item) values(row('pen',10,4.99));
+
+select * from inventory;
+
+select (item).name from inventory where (item).price > 3.99;
+
+-- create a currency enum data type with currency data
+
+create type currency as enum('usd','eur','gbp'); 
+
+select 'usd'::currency;
+
+alter type currency add value 'chf' after 'eur';
+
+create table stocks(
+	stock_id serial primary key,
+	stock_currency currency
+);
+
+insert into stocks (stock_currency) values('usd');
+
+create type sample_type as enum('ABC','123');
+
+drop type sample_type;
+
+-- alter data type
+
+create type myaddress as(
+	city varchar(50),
+	country varchar(20)
+);
+
+alter type myaddress rename to my_address;
+
+alter type my_address owner to postgres;
+
+alter type my_address set schema test_scm;
+
+alter type test_scm.my_address add attribute street_address varchar(100);
+
+-- Alter Enum Data type
+
+create type my_colors as enum('green','red','blue');
+
+
+alter type my_colors rename value 'green' to 'orange';
+
+-- list all enum values
+select enum_range(NULL::my_colors);
+
+-- add new value
+alter type my_colors add value 'yellow' before 'blue';
+
+-- Update an Enum data type in a production server
+
+
+create type status_enum as enum('queued','waiting','running','done');
+
+create table jobs (
+	job_id serial primary key,
+	job_status status_enum
+);
+
+insert into jobs(job_status) values('queued');
+
+select * from jobs;
+
+update jobs set job_status = 'running' where job_status='waiting';
+
+alter type status_enum rename to status_enum_old;
+
+-- An Enum with a default value in a table
+
+create type status as enum('pending','approved','declined');
+
+create table cron_jobs(
+	cron_job_id int,
+	status status default 'pending'
+);
+
+insert into cron_jobs(cron_job_id) values(1);
+select * from cron_jobs;
+
+
+
+-- create a type if not exists using pl/pgsql
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
