@@ -1,4 +1,4 @@
--- CROSS JOIN
+-- CROS JOIN 
 --#######################333
 --- * In as CROSS JOIN query , the result (also known as a cartesian product) lines up each row int he left table
 -- with each row in the right table to present all possible combination of rows
